@@ -1,0 +1,600 @@
+Identificacao de predadores sexuais brasileiros por meio de
+analise de conversas realizadas na Internet
+
+Leonardo Ferreira dos Santos!, Gustavo Paiva Guedes!
+
+!CEFET/RJ - Centro Federal de Educacao Tecnologica Celso Suckow da Fonseca
+Av. Maracana, 229 - Rio de Janeiro - RJ - Brasil.
+
+leonardo.santosfeic.cefet-rj.br, gustavo.quedes(tcefet-rJ.br
+
+Abstract. Nowadays, social applications represent one of the main threats to
+children and adolescents on the Internet. Among the various existent risks is
+the presence of sexual predators that seek, among the most diverse purposes,
+to obtain child pornographic content, to extort for financial purposes and, in
+more severe scenarios, the sexual abuse. The present work aims to identify
+Brazilian sexual predators through Convolutional Neural Networks. ln order to
+achieve this goal, it is considered conversations coming from criminal evidence
+that recently became publicly available. Preliminary results consolidate the
+presented methodology as an alternative for tasks of binary classification of
+texts for the Portuguese language.
+
+Resumo. Nos dias de hoje, aplicacoes sociais representam uma dos principais
+ameacas a criancas e adolescentes na Internet. Dentre os diversos riscos existentes destaca-se a presenca de predadores sexuais que buscam, entre os mais
+diversos fins, obter conteudo pornografico infantil, extorquir com finalidades
+financeiras e, em cenarios mais graves, o abuso sexual. O presente trabalho
+tem como objetivo identificar predadores sexuais brasileiros por meio de Redes
+Neurais Convolucionais. Para atingir esse objetivo, sao consideradas conversas provenientes de provas criminais disponibilizadas recentemente ao publico.
+Resultados preliminares consolidam a metodologia apresentada como uma alternativa para tarefas de classificacao binaria de textos para a lingua portuguesa.
+
+1. Introducao
+
+Hoje em dia, o uso constante de aplicacoes sociais na Internet representa um grande
+risco a criancas e adolescentes. Essas aplicacoes, acessadas principalmente por meio de
+smartphones e tablets, ampliam a exposicao a riscos inerentes ao meio como, por exemplo, o bullying, conteudo improprio, sexting, comunicacao com pessoas desconhecidas e
+encontros fora das redes sociais. Dentre os riscos destacados, o que levanta uma maior
+preocupacao e a possibilidade de conhecer novas pessoas e a ocorrencia de um abuso
+sexual.
+
+Nesse contexto, predadores sexuais agem de forma a ludibriar criancas e adolescentes [Olson et al., 2007] com os mais diversos propositos [NCMEC, 2017]: em 78%
+dos contatos, o principal objetivo e a obtencao de conteudo pornografico da vitima, enviado por aplicativos de conversas instantaneas. Em 7% dos contatos, alem da obtencao
+de conteudo pornografico, tambem ocorre a extorsao, esta se caracterizando por pedidos
+
+de transferencias financeiras, disponibilizacao de dados de cartao de credito dos pais e
+pertences. Por fim, 5% buscam diretamente o contato pessoalmente com a vitima com a
+finalidade de consumar o abuso sexual.
+
+O perfil de acesso de criancas e adolescentes brasileiros a Internet reflete um
+cenario preocupante quanto aos riscos supracitados. Em 2017, 85% das criancas e adolescentes com idades entre 9 e 17 anos tinham acesso a Internet no Brasil [BARBOSA,
+2018]. Destes, 44% usavam somente dispositivos moveis e sao majoritariamente pertencentes as classes A e B (76%) [BARBOSA, 2018].
+
+A possibilidade de contato entre um predador sexual e uma crianca ou adolescente e uma preocupacao global [Olowu, 2014; Dorasamy et al., 2018; Kloess et al.,
+2019], sendo o dominio de pesquisa de diversos trabalhos realizados nas ultimas decadas
+e intensificada pela ocorrencia da competicao PAN-2012!, que disponibilizou um conjunto de dados com conversas realizadas em varias comunidades virtuais. Dentre elas,
+conversas entre predadores sexuais convictos e agentes da organizacao Perverted-Justice
+(PJ. Esse conjunto de dados permitiu a identificacao de diversas caracteristicas do perfil
+do predador sexual, dentre elas: psicologicas [dos Santos and Guedes, 2018], comportamentais [Bogdanova et al., 2014] e textuais [Kontostathis et al., 2012], o que permitiu a
+criacao de diversos algoritmos de aprendizado de maquina para a identificacao automatica
+de predadores sexuais na Internet.
+
+Uma limitacao recorrente nas pesquisas para identificacao automatica de predadores sexuais na Internet e a carencia de dados reais, isto e, conversas que ocorreram entre
+predadores sexuais e vitimas, sendo as vitimas criancas ou adolescentes. Nesse cenario,
+o principal impedimento e o teor sensivel dos dados e por serem provas de processos que
+correm em sigilo na justica. Por nao serem disponibilizados como artefatos resultantes da
+pesquisa, acabam prejudicando a reprodutibilidade e a sua evolucao.
+
+Para o presente trabalho, consideramos o conjunto de dados preliminar disponibilizado pelo Ministerio Publico Federal de Sao Paulo (MPF-SP) em parceria com o Centro
+Universitario da Fundacao Educacional Inaciana (FET) para realizar uma analise textual
+e reproducao da primeira proposta para deteccao de predadores sexuais na Internet por
+meio de Redes Neurais Convolucionais (CNN) [Ebrahimi et al., 2016]. Ao melhor do
+nosso conhecimento, ainda nao foram realizados trabalhos para identificacao de predadores sexuais brasileiros por meio de conversas com criancas e adolescentes na Internet.
+
+As demais secoes estao dispostas da seguinte maneira: na secao 2, sao levantados
+trabalhos semelhantes e relacionados ao tema; na secao 3, e apresentado o conjunto de
+dados; na secao 4 e discutida a comunicacao entre predadores sexuais com criancas e
+adolescentes; na secao 5 e reproduzido o primeiro experimento considerando CNN para
+o dominio da pesquisa com o conjunto de dados apresentado e, por ultimo, a secao 6
+apresenta as conclusoes, limitacoes e discussao sobre trabalhos futuros.
+
+2. Trabalhos Relacionados
+
+Uma abordagem tipica para a identificacao de predadores sexuais na Internet e considera-la uma tarefa de classificacao de textos [Villatoro-Tello et al., 2012]. Sendo assim, ao
+
+Inttps://pan.webis.de/clefl2/pani2-web/author-identification.html
+?https://www.perverted-justice.com
+
+longo das duas ultimas decadas foram consideradas diversas abordagens. Em 2007, foi
+realizado um estudo piloto [Pendar, 2007] considerando as conversas registradas no site
+PJ para a criacao de um conjunto de dados. Para a identificacao dos predadores sexuais
+e aplicado Bag of Words (BOW) para geracao das caracteristicas, considerando unigra-mas, bigramas e trigramas. Sao considerados os algoritmos de classificacao k-nearest
+neighbors (k-NN) e Support Vector Machines (SVM) nos experimentos. A aplicacao do
+algoritmo k-NN considerando k = 30, obteve melhores resultados (F, = 94%), proximo
+dos resultados obtidos com o algoritmo SVM (HF, = 90%).
+
+No primeiro trabalho a fazer uso de caracteristicas comportamentais que se tem
+conhecimento [Kontostathis, 2009], e considerado o uso da Luring Communication Theory (LCT) [Olson et al., 2007] e tecnicas de mineracao de texto. Foram consideradas
+288 conversas extraidas do site PJ em que para cada etapa do processo de aliciamento da
+vitima descrito em LCT foi criado um lexico com os termos que melhor caracterizam a
+acao predatoria. No primeiro experimento, foram consideradas 16 conversas, separando
+as frases enviadas por predadores e vitimas para entao verificar a frequencia de cada etapa
+da LCT e para a tarefa de classificacao foi usado o algoritmo J48. Como resultado, foram
+obtidos resultados promissores (F = 60%). No segundo experimento, foram consideradas
+16 conversas extraidas do conjunto de dados da PJ e 16 conversas extraidas do Chat Tracker [Bengel et al., 2004]. Apos pre-processamento descrito no primeiro experimento, os
+dados foram submetidos a uma arvore de decisao C4.5, sendo obtidos resultados expressivos (F, = 93%).
+
+Villatoro-Tello et al. [2012] apresentam uma abordagem para identificacao de
+predadores sexuais composta por dois estagios. O primeiro estagio tem como objetivo
+identificar uma conversa predatoria enquanto no segundo estagio buscou-se diferenciar
+o predador sexual dos demais participantes. Nenhum pre-processamento foi realizado,
+apenas uma filtragem das conversas seguindo alguns criterios que melhor caracterizam
+um cenario de tentativa de abuso sexual na Internet: 1) Conversas com apenas um participante; 2) Conversas com menos de 6 mensagens; 3) Conversas com sequencias longas de
+caracteres sem um significante aparente. Aplicando esses 3 criterios, foi possivel reduzir
+em 90% a quantidade de conversas e usuarios unicos. Para a classificacao, foi considerada
+a criacao de um modelo BOW e representacao binaria para determinar a relevancia dos
+termos filtrados. No segundo estagio, foram empregados Redes Neurais Perceptron com
+Multiplas Camadas (NN-MLP) e representacao binaria. Os resultados obtidos (acuracia
+= 98%, HF, = 87%, Fo.5 = 93,4%) garantiram o primeiro lugar na competicao PAN-2012.
+
+A combinacao de caracteristicas psicolinguisticas e comportamentais tem apresentado resultados significativos. Bogdanova et al. [2014] define uma serie de caracteristicas de alto nivel com base em 3 conjuntos de dados: conversas registradas no site
+PJ, conversas normais presentes no NPSChat [Forsythand and Martell, 2007] e conversas de teor sexual obtidas na Internet?. O trabalho usa o classificador SVM e exalta a
+diferenca entre os resultados (acuracia = 97%) quando comparado com os resultados que
+usam apenas caracteristicas de baixo nivel (acuracia = 64%).
+
+Recentemente, Cardei and Rebedea [2017] aplica estrategia similar a VillatoroTello et al. [2012] adotando como estrategia um classificador em dois estagios. O pri-http: //web.archive.org/web/20040728084602/http://www.geocities.com/
+urgrl21f/
+
+meiro estagio considera caracteristicas textuais e comportamentais em conjunto com o
+classificador SVM para identificar conversas suspeitas de serem predatorias. O segundo
+estagio considera o mesmo conjunto de caracteristicas previamente citado, porem somente as conversas que foram marcadas como suspeitas. Por conta do numero reduzido
+de caracteristicas no segundo estagio, Random Forests (RD) apresentaram melhor desempenho que o classificador SVM. Apos analise dos experimentos, foi possivel identificar
+que as caracteristicas textuais apresentaram maior relevancia para a identificacao de conversas suspeitas enquanto as caracteristicas comportamentais para a identificacao do predador sexual. Os resultados encontrados (acuracia = 100%,abrangencia = 81.89, Fgs5 =
+95.7%) superam os encontrados na competicao PAN-2012.
+
+Por fim, recentemente foi realizada uma revisao de literatura em Ngejane et al.
+[2018]. Nessa revisao, foram considerados todos os trabalhos com melhores resultados,
+considerando as metricas acuracia e F,. Nesse contexto, destaca-se o primeiro trabalho
+fazendo uso de CNN [Ebrahimi et al., 2016], inspirado em uma abordagem que busca
+considerar a ordem das palavras para a tarefa de classificacao [Johnson and Zhang, 2015].
+
+O presente trabalho apresenta duas principais contribuicoes: a disponibilizacao
+do conjunto de dados na lingua portuguesa no formato usado na competicao PAN-2012 e
+reproducao da metodologia proposta em Ebrahimi et al. [2016] em experimentos considerando o conjunto de dados.
+
+3. Conjuntos de Dados
+
+Para o presente trabalho, foram analisadas conversas com predadores sexuais ocorridas
+no Brasil. A disponibilizacao dos dados? foi possivel devido uma parceria entre MPF-SP
+e FEI [Andrijauskas et al., 2017]. A Tabela 1 apresenta as caracteristicas do conjunto de
+dados.
+
+Tabela 1. Caracteristicas do conjunto de dados.
+
+Classe &t Conversas * Usuarios unicos
+Predatoria 39 78
+Nao predatoria 137 274
+
+A fim de viabilizar a divulgacao dos dados para o publico, e observado que os
+dados passaram por pre-processamento visando omitir qualquer informacao que permita
+identificar tanto o predador sexual quando a vitima. No lugar, foram inseridas marcacoes
+especificas para caracterizar o teor da informacao trocada. Desta forma, a Tabela 2 apresenta todas as marcacoes presentes no conjunto de dados.
+
+Conforme observado na Figura 1, os dados estao apresentados de forma similar
+ao formato usado na competicao PAN-2012 [Inches and Crestani, 2012]. No entanto,
+algumas informacoes nao foram disponibilizadas como, por exemplo, o horario de envio
+das mensagens e o arquivo com a lista de identificadores dos predadores sexuais presentes
+nas mensagens. Nas proximas secoes sao apresentados o pre-processamento e a analise
+feita para criacao do arquivo de identificadores.
+
+*hnttps://github.com/Andrijauskas/Datasets-Conversas
+
+Tabela 2. Marcacoes para preservacao de identidade de predadores sexuais e
+
+vitimas.
+Marcacao Teor da informacao
+>audio< Mensagens de audio enviadas e recebidas
+>emoticon<  Emojis somente (Emoticons textuais foram mantidos)
+>foto< Imagens enviadas e recebidas
+>local< Nomes de Cidade, Estado, Pais ou Nacionalidade
+>nome< Nomes ou apelidos que caracterizem alguma das partes
+
+>telefone< Numeros telefonicos
+
+<conversa id="1">
+
+<linha num="1">
+<autor>709916bfe16efs8cdd6102dc5453f302f</autor>
+<mensagem>Voce deita com migo na cama pelada</mensagem>
+
+</linha>
+
+<linha num="2">
+<autor>13f27f55ef3622f4e987aac6a57bice8</autor>
+<mensagem>Nao posso durmi ai</mensagem>
+
+</linha>
+
+<linha num="3">
+<autor>709916bfe16efs8cdd6102dc5453f302f</autor>
+<mensagem>Nao e pra dumir e so fica com migo ate as 3 horas da tardi</mensagem>
+
+</linha>
+
+<linha num="4">
+<autor>709916bfel6ef8cdd6102dc5453f302f</autor>
+<mensagem>Ai eu levo voce em bora</mensagem>
+
+</Vinha>
+
+<linha num="5">
+<autor>13f27f55ef3622f4e987aac6a57bice8</autor>
+<mensagem>Tah</mensagem>
+
+</linha>
+
+</conversa>
+
+Figura 1. Exemplo de conversa culpada disponibilizada pelo MPF-SP e FEI.
+
+3.1. Pre-processamento
+
+Entende-se que o formato proposto, estudado e difundido desde 2012, facilitara estudos
+comparativos assim como a validacao de modelos previamente propostos. Portanto, o
+primeiro esforco de pre-processamento no presente trabalho foi a adequacao do leiaute
+dos arquivos, criando arquivos analogos aos disponibilizados na competicao PAN-2012.
+Uma vez que as conversas registradas nao apresentam os horarios de envio, o atributo
+time conforme demonstrado na Figura 2 nao foi incluido.
+
+De forma a permitir a construcao de conjuntos de treinamento e teste, faz-se necessario identificar quais conversas apresentam atividade predatoria ou teor predatorio.
+Apos analise individual das conversas foi possivel identificar um erro de imputacao dos
+dados em uma das conversas (id = 2). A conversa erroneamente apresenta dois predadores sexuais e uma vitima, porem o segundo predador sexual nao apresenta relacao com o
+contexto da discussao. No entanto, os dados foram preservados uma vez que o objetivo
+do presente trabalho nao e impactado. O arquivo resultante “pan12-br-sexual-predatoridentification-training-corpus-predators.txt” apresentou um total de 39 predadores e segue estritamente o formato proposto na competicao PAN-2012.
+
+Durante analise exploratoria dos dados foram identificados dois pontos para
+correcao: 1) os dados disponibilizados apresentavam mais de uma codificacao (ISO-8859le UTF-8), o que poderia impactar a validacao de resultados de experimentos em ambi-
+
+<conversation id="1dad6eb4815de5e2b27doc396abfodcr">
+
+«message line="1">
+<author=>634f9ee018e70d40didb4agbf3a2d35d<=/author>
+<time>02:55</time>
+<text>hi</text>
+
+<jmessage>
+
+«message line="2">
+<author>898d2f30e39b4fci43ebdfscab5c6a92</author>
+<time>02:55</time>
+<text>asl</text>
+
+<jmessage>
+
+«message line="3">
+<author>634f9ee018e70d40didb4adbf3a2d35d</author>
+<time>02:55</time>
+<text=m or f</text>
+
+<jmessage>
+
+«message line="4">
+<author>898d2f30e39b4fci43ebdf8cab5c6a92</author>
+<time>02:55</time>
+<text>m</text>
+
+</jmessage>
+
+</conversation=
+
+Figura 2. Exemplo de conversa culpada disponibilizada no conjunto de dados
+PAN-2012.
+
+ente Unix. Como medida, todos os conjuntos de dados foram convertidos para UTF-8;
+2) os arquivos disponibilizados com a extensao xml nao apresentam um formato valido,
+o que pode impedir o funcionamento de algumas bibliotecas de manipulacao de arquivos
+XML. Foram encontrados dois pontos para correcao: a) a adicao de declaracao da versao
+da especificacao XML usada e encoding (UTF-8); b) a substituicao do uso de caracteres
+“>” e “<”, considerados ilegais”, como delimitadores dos marcadores para preservacao
+de identidade por “[” e “]”. O conjunto de dados resultante do pre-processamento foi
+
+denominado “PAN-2012-BR”.
+
+4. Analise das conversas culpadas
+
+De acordo com os dados disponibilizados, uma conversa e considerada culpada quando
+e constatada a presenca de predadores sexuais conversando com outras pessoas, sendo
+essas menores de idade ou nao. Dentre as 436 mensagens enviadas em conversas com
+predadores sexuais, 260 (59,63%) tiveram o predador sexual como remetente. As demais
+mensagens (176 - 40,37%) foram enviadas majoritariamente por criancas e adolescentes,
+porem, tambem foi possivel encontrar ocorrencias de mensagens produzidas por pessoas
+se passando por vitimas (e.g., pai se passando pela crianca) e pessoas do circulo de amizades do predador. Cada conversa apresentou em media pouco mais de 11 mensagens
+trocadas. Embora a maioria das conversas apresente 4 mensagens trocadas, sao encontradas conversas contendo ate 41 mensagens.
+
+A investigacao teve como proposito identificar, dentre as marcacoes realizadas
+nos dados originais, quais foram mais usadas e quem mais as explorou. Dentre as 39
+conversas culpadas nao foram encontradas ocorrencias de envio de mensagens de audio.
+Na Tabela 3 e apresentada a quantidade de ocorrencias de cada uma das marcacoes para
+predadores sexuais ou criancas e adolescentes.
+
+Analisando as mencoes a nomes em conversas, estes foram usados com o
+
+Ihttps://www.w3schools.com/xml/xml syntax.asp
+
+Tabela 3. Ocorrencia de marcacoes em conversas culpadas.
+
+Marcacao Predadores Sexuais Criancas e Adolescentes
+
+>audio< 0 0
+>emoticon< 19 5
+>foto< 0 1
+>local< 7 1
+>nome< 12 0
+>telefone< 0 0
+
+proposito, primariamente, de obter intimidade com a vitima e passar seguranca (e.g., “oi
+seja bem vinda a meu face oficial sou eu [nome] vc tem que idade ?”) nas fases iniciais,
+quando se desenvolve uma falsa relacao enganosa com a vitima. Tambem foi usado em
+tom intimidatorio, quando ja existe uma intimidade desenvolvida. O acentuado uso de
+emoticons por parte do predador sexual tambem caracteriza a acao de dessensibilizacao
+do teor conversado, buscando amenizar o impacto negativo nas conversas, assim como
+ludibriar a vitima (“So uma pergunta so para sabe se posso dar em cima [emoticon]”).
+
+As mencoes a locais foram encontradas em varios momentos da comunicacao
+do predador sexual, desde conversas introdutorias (“Tc de [local] mesmo linda?” ate
+estagios avancados do abuso (“Vem ate mim to com medo de ir ai Tem muita gente ai
+Frente a [local]”). Um ponto importante e que nao foram identificados envios de audios
+e fotos por parte do predador sexual. Em algumas conversas o predador sexual se dispoe
+a enviar fotos para a vitima, porem nao foram observadas ocorrencias do envio de fato.
+Esse comportamento reflete uma caracteristica dos predadores sexuais que e o uso da
+anonimidade para a realizacao do crime. O comportamento encontrado na comunicacao
+dos predadores sexuais com as vitimas, identificado por meio dos marcadores, corrobora
+a teoria fundamentada em Olson et al. [2007].
+
+5. Usando CNN para identificacao de Predadores Sexuais na Internet
+
+O conjunto de dados da competicao PAN-2012 apresenta a distribuicao descrita na Tabela
+4. A fim de manter a mesma proporcao, foi realizada a mesma distribuicao dos dados para
+os conjuntos de treinamento (30%) e teste (70%), conforme descrito na Tabela 5.
+
+Tabela 4. Caracteristicas do conjunto de dados da competicao PAN-2012
+Subconjunto Conversas * Usuarios unicos * Predadores Sexuais
+Treinamento 66.927 97.695 142
+
+Teste 155.128 218.716 254
+
+Tabela 5. Caracteristicas do conjunto de dados “PAN-2012-BR”
+Subconjunto * Conversas * Usuarios unicos Predadores Sexuais
+Treinamento 52 104 11
+
+Teste 124 248 28
+
+
+Pre-Processamento
+
+Conversas
+
+Criacao
+dos
+
+Arquivos
+
+"Positive"
+
+Transformacao das
+conversas para
+
+Entrada
+da CNN
+
+Documentos .TXT BM de
+
+Conversas
+
+- - "Negative"
+Aplicado nos conjuntos
+"Training" e “Test”
+
+Dicionario de
+Categorias
+
+Para cada conjunto, foram criados:
+
+Contem as categorias
+- pan br.txt.tok : Cada linha corresponde a uma conversa. possiveis para O
+
+modelo: "Positive" e
+
+- pan br.cat: A categoria para cada conversa em "pan br.txt.tok”. "Negative".
+
+Figura 3. Preparacao dos dados para posterior uso na biblioteca conText.
+
+O primeiro experimento consiste na reproducao da arquitetura da CNN especificada em Ebrahimi et al. [2016] no conjunto de dados recem criado “PAN-2012-BR”.
+Para a reproducao do experimento foi considerada a biblioteca conText”, que implementa
+a especializacao do algoritmo CNN para considerar a ordem das palavras [Johnson and
+Zhang, 2015].Os scripts contendo os parametros para montagem e configuracao da CNN
+foram disponibilizados pelo autor. Para a execucao apropriada do experimento foram
+necessarias tarefas de pre-processamento especificas, conforme pode ser observado na
+Figura 3.
+
+Para o treinamento e teste da CNN foram utilizados os mesmos hiperparametros
+do trabalho considerado como referencia [Ebrahimi et al., 2016]: 2000 neuronios para a
+camada de entrada, 3 regioes, regularizacao L2 = 107“, taxa de Dropout = 0,5, funcao
+de perda quadratica, funcao de ativacao ReLU e Kernel Linear. Conforme detalhado previamente no pre-processamento dos dados para posterior uso na biblioteca conText, cada
+conversa foi considerada uma caracteristica e todas foram submetidas a diminuicao de
+case e convertidas para codificacao UTF-8. Na fase de treinamento, foram consideradas
+as 5.000 palavras com maior ocorrencia nas conversas, 100 epocas e decaimento de peso.
+Nos demais hiperparametros, foram considerados os valores padrao da biblioteca usada.
+A arquitetura proposta pelo autor pode ser observada na Figura 4.
+
+Realizamos tres testes no conjunto de dados “PAN-2012-BR” considerando os hiperparametros citados acima: o primeiro teste, considerou a mesma proporcao de dados
+do conjunto de dados PAN-2012 (30% para treinamento e 70% para testes). No segundo
+
+http://riejohnson.com/cnn download.html
+
+Predatoria Nao-Predatoria
+Camada
+
+Softmax (Conectada)
+
+Camada
+Conectada
+
+Camada de
+Convolucao
+
+Convolucao &1
+Convolucao &2
+E Convolucao &3
+
+Camada de
+
+Entrada T
+[1001000...]
+
+Conversa
+
+Figura 4. Adaptacao para arquitetura de CNN reproduzida nos experimentos presente em Ebrahimi et al. [2016]. Autor: Proprio.
+
+teste, invertemos a proporcao dos conjuntos (70% para treinamento e 30% para testes).
+Por fim, no terceiro teste aplicamos o algoritmo K-Fold estratificado (K = 5). Os resultados podem ser observados na Tabela 6:
+
+Tabela 6. Resultados do primeiro experimento com o “PAN-2012-BR” considerando os hiperparametros utilizados no trabalho proposto por Ebrahimi et al.
+
+[2016].
+Modelo Acuracia Precisao Abrangencia HH, Fos
+CNN (30%/710%) 0.99 1.0 0.98 0.99 0.99
+CNN (70%/30%) 1.0 1.0 1.0 LO 10
+CNN (5-Fold) 0.99 1.0 0.99 0.99 0.99
+
+Por conta dos resultados obtidos no experimento, resolvemos explorar a alteracao
+de dois hiperparametros do modelo: o algoritmo de otimizacao que, por padrao na biblioteca conText, considera o Gradiente Descendente Estocastico (SGD) e o numero de
+palavras no vocabulario do conjunto de treinamento. Os resultados podem ser observados
+nas Tabelas 7 e 8.
+
+Tabela 7. Resultados do segundo experimento considerando as proporcoes
+(30%/70%) e (70%/30%) para os conjuntos de treinamento e teste. E considerado
+o otimizador SGD e diferentes tamanhos de vocabulario para treinamento.
+
+Modelo Acuracia Precisao Abrangencia KH Fos
+CNN (30%/70%), vocab=1000 1.0 1.0 1.0 LO 1.0
+CNN (70%/30%), vocab=1000 1.0 1.0 1.0 LO 1.0
+CNN (30%/70%), vocab=10000 0.99 1.0 0.98 0.99 0.99
+CNN (70%/30%), vocab=10000 1.0 1.0 1.0 LO 1.0
+CNN (30%/70%), vocab=15000 0.99 1.0 0.98 0.99 0.99
+CNN (70%/30%), vocab=15000 1.0 1.0 1.0 LO 1.0
+
+Tabela 8. Resultados do segundo experimento considerando as proporcoes
+(30%/70%) e (70%/30%) para os conjuntos de treinamento e teste. E considerado
+o otimizador RMSProp e diferentes tamanhos de vocabulario para treinamento.
+
+Modelo Acuracia Precisao Abrangencia KH Fos
+CNN (30%/70%), vocab=1000 0.99 0.98 1.0 0.99 0.99
+CNN (70%/30%), vocab=1000 0.92 0.91 1.0 0.95 0.92
+CNN (30%/70%), vocab=5000 0.99 1.0 0.98 0.99 0.99
+CNN (70%/30%), vocab=5000 0.92 0.91 1.0 0.95 0.92
+CNN (30%/70%), vocab=10000 0.99 0.98 1.0 0.99 0.99
+CNN (70%/30%), vocab=10000 0.96 0.95 1.0 0.97 0.96
+CNN (30%/70%), vocab=15000 0.99 0.98 1.0 0.99 0.99
+CNN (70%/30%), vocab=15000 0.94 0.93 1.0 0.96 0.94
+
+Durante a reproducao dos experimentos foi possivel observar que, na maioria dos
+cenarios, o modelo atingiu taxa de erro zero em ate 50 epocas. A partir de entao, o
+modelo perdeu capacidade de generalizacao embora tenha mantido ainda resultados altos
+nas metricas de classificacao, o que, na nossa interpretacao caracterizou um cenario de
+sobreajuste. Esse comportamento ficou mais evidente quando aplicado o algoritmo de
+otimizacao RMS Prop considerando 70% dos dados para treinamento. Em alguns casos foi
+obtido 100% de acuracia em poucas epocas de treinamento, por exemplo, o modelo “CNN
+(70%/30%), vocab=5000” precisou de apenas 12 epocas para atingir 100% de acuracia.
+Um ponto importante e que o tamanho do vocabulario apresentou impacto discreto no uso
+do otimizador SGD.
+
+6. Conclusao e trabalhos futuros
+
+Predadores sexuais sao uma ameaca a criancas e adolescentes na Internet brasileira. O
+presente trabalho apresentou a reproducao do primeiro experimento considerando CNN
+na identificacao de predadores sexuais na Internet com dados oriundos de investigacoes
+do MPF-SP e liberados ao publico. E o primeiro trabalho nesse contexto que se tem
+conhecimento com o uso de dados na lingua portuguesa.
+
+Resultados significativos obtidos nos experimentos consolidam o uso de CNN
+
+como uma alternativa para a identificacao de atividade predatoria no Brasil. No entanto,
+a diversidade de vocabulario usado pelo predador, principalmente girias e erros de ortografia, o tornam muito diferente do presente nas conversas nao-predatorias. Com relacao
+a esse ponto, conclui-se que o conjunto de dados apresenta uma baixa complexidade para
+a tarefa de classificacao. Como citado na secao anterior, termos especificos usados em
+conversas predatorias comecaram a ser encontrados apos considerar um vocabulario com
+15.000 termos. Considerando e a baixa complexidade citada previamente na classificacao
+de um conjunto de dados desbalanceado, entende-se que os resultados obtidos se deram
+por conta da maior capacidade da rede de identificar corretamente uma mensagem nao-predatoria.
+
+Um ponto para melhoria do conjunto de dados seria a adicao de conversas predatorias. A principal motivacao, alem da necessidade de balanceamento, e ampliar o vocabulario de conversas predatorias. Entende-se que o regionalismo impacta diretamente
+na diversificacao de girias, portanto, o aumento de conversas predatorias teria impacto
+direto na capacidade de generalizacao do modelo. O aumento da diversidade de temas
+discutidos em conversas nao-predatorias, cujo vocabulario apresente alguma similaridade
+com o usado em conversas predatorias, tambem e necessario. Por fim, e necessario alterar
+a arquitetura da CNN apresentada no experimento para melhor adaptacao aos textos em
+portugues, visto que inicialmente essa arquitetura foi projetada para o conjunto de dados
+da competicao PAN-2012.
+
+Como oportunidade para trabalhos futuros, e considerado validar trabalhos que
+apresentaram resultados relevantes e candidatos ao estado da arte no dominio da pesquisa,
+com o principal proposito de identificar quais caracteristicas melhor contribuem para a
+identificacao da atividade predatoria no Brasil.
+
+7. Agradecimentos
+
+Ao Centro Universitario da Fundacao Educacional Inaciana, em particular, o Prof.
+Dr. Rodrigo Filev Maia e ao Ministerio Publico Federal, especialmente a chefe
+do departamento de Crimes Ciberneticos, Adriana Shimabukuro, pela cooperacao na
+disponibilizacao dos dados para a pesquisa.
+
+Referencias
+
+Andrijauskas, A., Shimabukuro, A., and Maia, R. F. (2017). Desenvolvimento de base de
+dados em lingua portuguesa sobre crimes sexuais. VII Simposio de Iniciacao Cientifica,
+Didatica e de Acoes Sociais da FET.
+
+BARBOSA, A. F. (2018). Pesquisa sobre o uso da internet por criancas e adolescentes no
+brasil: Tic kids online brasil 2017. Sao Paulo: Comite Gestor da Internet no Brasil.
+Bengel, J., Gauch, S., Mittur, E., and Vijayaraghavan, R. (2004). Chattrack: Chat room
+
+topic detection using classification. In IST.
+
+Bogdanova, D., Rosso, P., and Solorio, T. (2014). Exploring high-level features for detecting cyberpedophilia. Computer speech & language, 28(1):108-120.
+
+Cardei, C. and Rebedea, T. (2017). Detecting sexual predators in chats using behavioral
+features and imbalanced learning. Natural Language Engineering, 23(4):589-616.
+
+Dorasamy, M., Jambulingam, M., and Vigian, T. (2018). Building a bright society with
+au courant parents: Combating online grooming.
+
+dos Santos, L. F. and Guedes, G. P. (2018). Deteccao de tracos de narcisismo em conversas
+com predadores sexuais. In 7o Brazilian Workshop on Social Network Analysis and
+Mining (BraSNAM 2018), volume 7. SBC.
+
+Ebrahimi, M., Suen, C. Y., and Ormandjieva, O. (2016). Detecting predatory conversations in social media by deep convolutional neural networks. Digital Investigation,
+18:33-49.
+
+Forsythand, E. N. and Martell, C. H. (2007). Lexical and discourse analysis of online
+chat dialog. In International Conference on Semantic Computing (ICSC 2007), pages
+19-26. IEEE.
+
+Inches, G. and Crestani, F. (2012). Overview of the international sexual predator identification competition at pan-2012. In CLEF (Online working notes/labs/workshop),
+volume 30.
+
+Johnson, R. and Zhang, T. (2015). Effective use of word order for text categorization
+with convolutional neural networks. In Proceedings of the 2015 Conference of the
+North American Chapter of the Association for Computational Linguistics: Human
+Language Technologies, pages 103-112.
+
+Kloess, J. A., Hamilton-Giachritsis, C. E., and Beech, A. R. (2019). Offense processes of
+online sexual grooming and abuse of children via internet communication platforms.
+Sexual Abuse, 31(1):73-96.
+
+Kontostathis, A. (2009). Chatcoder: Toward the tracking and categorization of internet
+predators. In Proceedings of Text Mining Workshop 2009 held in conjunction with the
+Ninth SIAM International Conference on Data Mining (SDM 2009). SPARKS, NV. May
+2009. Citeseer.
+
+Kontostathis, A., Garron, A., Reynolds, K., West, W., and Edwards, L. (2012). Identifying
+predators using chatcoder 2.0. In CLEF (Online Working Notes/Labs/Workshop).
+
+NCMEC | (2017). The online enticement of children: An indepth analysis of cybertipline reports. National Center for
+Missing & Exploited Children Web site., https://missingkidsstage.adobecgms.net/ourwork/publications/exploitation/onlineenticement. Acessado
+em 16 de marco de 2019.
+
+Ngejane, C., Mabuza-Hocquet, G., Floff, J., and Lefophane, S. (2018). Mitigating online
+sexual grooming cybercrime on social media using machine learning: A desktop survey. In 2018 International Conference on Advances in Big Data, Computing and Data
+Communication Systems (icABCD), pages 1-6. IEEE.
+
+Olowu, D. (2014). Cyber-based obscenity and the sexual exploitation of children via
+the internet: Implications for africa. In African Cyber Citizenship Conference 2014
+(ACCC2014), page 115.
+
+Olson, L. N., Daggs, J. L., Ellevold, B. L., and Rogers, T. K. (2007). Entrapping the
+innocent: Toward a theory of child sexual predators” luring communication. Communication Theory, 17(3):231-251.
+
+Pendar, N. (2007). Toward spotting the pedophile telling victim from predator in text
+chats. In International Conference on Semantic Computing (ICSC 2007), pages 235241. IEFE.
+
+Villatoro-Tello, E., Juarez-Gonzalez, A., Escalante, H. J., Montes-y Gomez, M., and Pineda, L. V. (2012). A two-step approach for effective detection of misbehaving users
+in chats. In CLEF (Online Working Notes/Labs/Workshop), volume 1178.
