@@ -1,0 +1,12 @@
+Métrica,Valor
+Palavras (tokens),2346.0
+Vocabulário (types),667.0
+Mensagens,436.0
+Palavras por mensagem (µ),5.38
+Palavras por mensagem (σ),6.2
+Hapax Legomena,404.0
+Dis Legomena,97.0
+Razão Tipo/Token (TTR),0.2843
+Comprimento médio das palavras (chars),4.01
+Comprimento médio das mensagens (chars),26.82
+Razão de Hapax,0.6057
