@@ -115,7 +115,7 @@ for n1, n2, s in pares_tfidf[:4]:
     print(f"{n1} - {n2} - {s:.3f}")
 
 
-# ---------- Exportar tabelas para montar os PDFs ----------
+# ---------- Exportar CSVs ordenados (maior -> menor) ----------
 def salvar_csv(arquivo, cabecalho, linhas):
     with open(arquivo, "w", encoding="utf-8") as f:
         f.write(",".join(cabecalho) + "\n")
@@ -123,22 +123,28 @@ def salvar_csv(arquivo, cabecalho, linhas):
             f.write(",".join(str(x) for x in l) + "\n")
 
 
+# df/idf: ordenado por df (maior -> menor); empate fica em ordem alfabética
+termos_df = sorted(vocab, key=lambda t: df[t], reverse=True)
 salvar_csv(
     "./Trabalho03/tabela_df_idf.csv",
     ["Termo", "df", "idf"],
-    [[t, df[t], f"{idf[t]:.3f}"] for t in vocab],
+    [[t, df[t], f"{idf[t]:.3f}"] for t in termos_df],
 )
 
+# TF: ordenado pela soma do TF do termo em todos os documentos (maior -> menor)
+termos_tf = sorted(vocab, key=lambda t: sum(TF[t]), reverse=True)
 salvar_csv(
     "./Trabalho03/matriz_tf.csv",
     ["Termo"] + NOMES,
-    [[t] + [f"{v:.3f}" for v in TF[t]] for t in vocab],
+    [[t] + [f"{v:.3f}" for v in TF[t]] for t in termos_tf],
 )
 
+# TF-IDF: ordenado pela soma do TF-IDF do termo em todos os documentos (maior -> menor)
+termos_tfidf = sorted(vocab, key=lambda t: sum(TFIDF[t]), reverse=True)
 salvar_csv(
     "./Trabalho03/matriz_tfidf.csv",
     ["Termo"] + NOMES,
-    [[t] + [f"{v:.3f}" for v in TFIDF[t]] for t in vocab],
+    [[t] + [f"{v:.3f}" for v in TFIDF[t]] for t in termos_tfidf],
 )
 
 print("Gerados: tabela_df_idf.csv, matriz_tf.csv, matriz_tfidf.csv")
